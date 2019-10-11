@@ -15,7 +15,7 @@
     $("a.anchorjs-link").click(function(){
         var data = window.location.href;
         var heading = $(this).attr('href');
-        var title = heading.substr(1)
+        var title = heading.substr(1);
         var arr = data.split('#');
         var k8sLink = arr[0] + heading;
         var formattedLink = "[]" + " - " + title + " - " + k8sLink;
