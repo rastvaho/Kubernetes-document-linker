@@ -7,54 +7,42 @@
 // @author       Tom Ellis
 // @match        https://kubernetes.io/*
 // @grant        GM_addStyle
+// @grant        GM_setClipboard
 // @require  http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js
 // ==/UserScript==
-(function() {
-    'use strict';
 
-    $("a.anchorjs-link").click(function(){
-        var data = window.location.href;
-        var heading = $(this).attr('href');
-        var title = heading.substr(1);
-        var arr = data.split('#');
-        var k8sLink = arr[0] + heading;
-        var formattedLink = "[]" + " - " + title + " - " + k8sLink;
+(function () {
+  'use strict';
 
-        copyStringToClipboard(formattedLink);
-    });
-    var PlainLink = "<button class=\"CopyButton\" type=\"button\">Plain Link</button>";
-    var TitleLink = "<button class=\"CopyButton\" type=\"button\">[ ] Title - Link</button>";
-    var LinkTitle = "<button class=\"CopyButton\" type=\"button\">[ ] Link - Title</button>";
-    $("a.anchorjs-link").after("<div>" + PlainLink + TitleLink + LinkTitle + "</div>");
+  var TitleFirst = "<button id=\"TitleFirst\" class=\"DocumentLinkerCopy\" type=\"button\">[ ] Title - Link</button>";
+  var LinkFirst = "<button id=\"LinkFirst\" class=\"DocumentLinkerCopy\" type=\"button\">[ ] Link - Title</button>";
+
+  $("a.anchorjs-link")
+    .after("<div class=\"buttonDiv\"><button class=\"PlainLink\" type=\"button\">Plain link</button></div>");
+
+   $(".PlainLink").click(function(){
+      var anchor = $(this).parents(".buttonDiv").prev();
+      var origin = $(anchor)[0].origin;
+      var path = $(anchor)[0].pathname;
+      var hash = $(anchor)[0].hash;
+
+      var url = origin + path + hash;
+      GM_setClipboard(url);
+  });
+
 })();
 
-function copyStringToClipboard (str) {
-   var element = document.createElement('textarea');
-   element.value = str;
-   // Set non-editable to avoid focus and move outside of view
-   element.setAttribute('readonly', '');
-   element.style = {position: 'absolute', left: '-9999px'};
-   document.body.appendChild(element);
-   // Select text inside element
-   element.select();
-   // Copy text to clipboard
-   document.execCommand('copy');
-   // Remove temporary element
-   document.body.removeChild(element);
-}
-
-
-GM_addStyle ( `
-    .CopyButton {
-  background-color: #326CE6; /* Green */
-  border: none;
-  color: white;
-  padding: 5px 8px 5px 8px;
-  margin: 2px 10px 2px 0px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 14px;
-  border-radius: 5px;
+GM_addStyle(`
+  .PlainLink {
+background-color: #326CE6; /* Green */
+border: none;
+color: white;
+padding: 5px 8px 5px 8px;
+margin: 2px 10px 2px 0px;
+text-align: center;
+text-decoration: none;
+display: inline-block;
+font-size: 16px;
+border-radius: 5px;
 }
 `);
