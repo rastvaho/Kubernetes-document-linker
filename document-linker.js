@@ -21,32 +21,32 @@
     .after("<div class=\"buttonDiv\"></div>")
 
   $("div.buttonDiv")
-    .append("<button class=\"PlainLink btn-copy-to-clipboard\" type=\"button\">Plain link</button>");
+    .append("<button class=\"PlainLink btn-copy-to-clipboard\" type=\"button\">Plain link</button>")
+    .append("<button class=\"TitleLink btn-copy-to-clipboard\" type=\"button\">[ ] Title - Link</button>");
 
    $(".PlainLink").click(function(){
       var anchor = $(this).parents(".buttonDiv").prev();
       var origin = $(anchor)[0].origin;
       var path = $(anchor)[0].pathname;
       var hash = $(anchor)[0].hash;
-       var t = $(anchor);
-
-
       var url = origin + path + hash;
-       console.log(t);
-      console.log(url);
+      
       GM_setClipboard(url);
   });
 
-    $(".TitlePrimary").click(function(){
+    $(".TitleLink").click(function(){
       var anchor = $(this).parents(".buttonDiv").prev();
       var origin = $(anchor)[0].origin;
       var path = $(anchor)[0].pathname;
       var hash = $(anchor)[0].hash;
-
+      var html = $(this).parents(".buttonDiv").prev().parent()
+      var htmlTitle = $(html)[0].innerHTML
+      var title= htmlTitle.substr(0, htmlTitle.indexOf('<a')); 
       var url = origin + path + hash;
-
-       console.log(anchor);
-      console.log(url);
+      var formatted = "[] " + title + " - " + url;
+            
+      GM_setClipboard(formatted);
+      
   });
 
 })();
