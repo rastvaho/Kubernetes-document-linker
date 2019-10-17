@@ -23,46 +23,42 @@
     .append("<button class=\"LinkFirst btn-copy-to-clipboard\" type=\"button\">[ ] Link - Title</button>");
 
    $(".PlainLink").click(function(){
-      var anchor = $(this).parents(".buttonDiv").prev();
-      var origin = $(anchor)[0].origin;
-      var path = $(anchor)[0].pathname;
-      var hash = $(anchor)[0].hash;
-      var url = origin + path + hash;
-      
-      GM_setClipboard(url);
+    var elements = GetElements(this);
+    
+    GM_setClipboard(elements.URL);
   });
 
     $(".TitleFirst").click(function(){
-      var anchor = $(this).parents(".buttonDiv").prev();
-      var origin = $(anchor)[0].origin;
-      var path = $(anchor)[0].pathname;
-      var hash = $(anchor)[0].hash;
-      var html = $(this).parents(".buttonDiv").prev().parent()
-      var htmlTitle = $(html)[0].innerHTML
-      var title= htmlTitle.substr(0, htmlTitle.indexOf('<a')); 
-      var url = origin + path + hash;
-      var formatted = "[] " + title + " - " + url;
+      var elements = GetElements(this);
+      var formatted = "[] " + elements.Title + " - " + elements.URL;
       
       GM_setClipboard(formatted);
       
   });
 
-  $(".LinkFirst").click(function(){
-    var anchor = $(this).parents(".buttonDiv").prev();
-    var origin = $(anchor)[0].origin;
-    var path = $(anchor)[0].pathname;
-    var hash = $(anchor)[0].hash;
-    var html = $(this).parents(".buttonDiv").prev().parent()
-    var htmlTitle = $(html)[0].innerHTML
-    var title= htmlTitle.substr(0, htmlTitle.indexOf('<a')); 
-    var url = origin + path + hash;
-    var formatted = "[] " + url + " - " + title;
+
+$(".LinkFirst").click(function(){
+    var elements = GetElements(this);
+    var formatted = "[] " + elements.URL + " - " + elements.Title;
     
     GM_setClipboard(formatted);
     
-});
+  });
+
 
 })();
+
+function GetElements(el){
+    var anchor = $(el).parents(".buttonDiv").prev();
+    var origin = $(anchor)[0].origin;
+    var path = $(anchor)[0].pathname;
+    var hash = $(anchor)[0].hash;
+    var html = $(el).parents(".buttonDiv").prev().parent()
+    var htmlTitle = $(html)[0].innerHTML
+    var title= htmlTitle.substr(0, htmlTitle.indexOf('<a')); 
+    var url = origin + path + hash;
+    return {"Title": title, "URL": url}
+}
 
 GM_addStyle(`
   .btn-copy-to-clipboard {
