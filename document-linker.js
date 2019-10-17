@@ -3,7 +3,7 @@
 // @namespace    https://kubernetes.io
 // @include      https://kubernetes.io/*
 // @version      0.1
-// @description  Copy and format a link when user selects an anchor link.
+// @description  Dynamically creates buttons to copy a formatted link for use in customer correspondences.
 // @author       Tom Ellis
 // @match        https://kubernetes.io/*
 // @grant        GM_addStyle
