@@ -8,7 +8,6 @@
 // @match        https://kubernetes.io/*
 // @grant        GM_addStyle
 // @grant        GM_setClipboard
-// @require  http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js
 // ==/UserScript==
 
 
@@ -38,7 +37,10 @@
       var $that = $(this);
       var refrence = $that.data('reference');
       $that.parent().find('.js-snackbar').addClass('show');
-      setTimeout(function(){  $that.parent().find('.js-snackbar').removeClass('show');; }, 3000);
+      $that.parent().find('.js-snackbar').addClass('show').delay(2000).queue(function(next ){
+          $(this).removeClass('show');
+         next();
+       });
       GM_setClipboard(refrence);
 
   });
